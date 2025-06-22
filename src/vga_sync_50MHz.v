@@ -9,7 +9,7 @@
 //
 // 28-Nov-05 ike: adjusted vsync to be closer to vesa standard
 
-module vga_sync(clk,hsync,vsync,hcount,vcount,pix_clk,blank);
+module vga_sync_50MHz(clk,hsync,vsync,hcount,vcount,pix_clk,blank);
 
    input clk;     // 50Mhz
    output hsync;
@@ -18,11 +18,11 @@ module vga_sync(clk,hsync,vsync,hcount,vcount,pix_clk,blank);
    output 	pix_clk;
    output 	blank;
    
-   // pixel clock: 25Mhz = 40ns (clk/4)
-   reg [1:0] pcount;        // used to generate pixel clock
-   wire en = (pcount == 0);
-   always @ (posedge clk) pcount <= pcount + 1 ;
-   assign pix_clk = en;
+   // pixel clock: 25Mhz = 40ns (clk/2)
+   reg 		pcount;		 // used to generate pixel clock
+   wire 	en = (pcount == 0);
+   always @ (posedge clk) pcount <= ~pcount;
+   assign 	pix_clk = en;
    
    //****************************************************************
    //****************************************************************
@@ -66,3 +66,4 @@ module vga_sync(clk,hsync,vsync,hcount,vcount,pix_clk,blank);
    end
    
 endmodule
+
