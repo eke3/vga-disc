@@ -7,6 +7,7 @@ module top (
     output logic VGA_HS,
     output logic VGA_VS,
     input logic CLK100MHZ,
+    input logic [2:0] SW,
     input logic BTNC
 );
 
@@ -46,6 +47,7 @@ module top (
         .red(rgb_[0]),
         .green(rgb_[1]),
         .blue(rgb_[2]),
+        .switch(SW),
         .pos_h(pos_h_),
         .pos_v(pos_v_),
         .blank(blank_),

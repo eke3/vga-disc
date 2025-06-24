@@ -12,6 +12,7 @@ module vga_discs_controller #(
     output logic red,
     output logic green,
     output logic blue,
+    input logic [2:0] switch,
     input logic [9:0] pos_h,
     input logic [9:0] pos_v,
     input logic blank,
@@ -26,6 +27,7 @@ module vga_discs_controller #(
         S_DISC_RIGHT
     } state_t;
 
+    logic r, g, b;
     logic [2:0] flag_on_disc;
     logic [2:0] mul_done;
     logic [2:0] mul_enable = 3'b0;
@@ -82,6 +84,13 @@ module vga_discs_controller #(
         .clk(clk)
     );
 
+    color_selector color_selector_inst (
+        .red(r),
+        .green(g),
+        .blue(b),
+        .switch(switch)
+    );
+
     always_ff @(posedge clk) begin
         red <= red; green <= green; blue <= blue; mul_enable <= mul_enable; CS <= CS; NS = CS;
 
@@ -110,8 +119,8 @@ module vga_discs_controller #(
         endcase
         CS <= NS;
 
-        red <= |flag_on_disc;
-        green <= 1'b0;
-        blue <= 1'b0;
+        red <= (|flag_on_disc) && r;
+        green <= (|flag_on_disc) && g;
+        blue <= (|flag_on_disc) && b;
     end
 endmodule
